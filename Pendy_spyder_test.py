@@ -34,13 +34,12 @@ def Input():
     else:
         return letter.upper()
     
-    
 
 #si la lettre est trouvée
 
-def hangman(chance):
-    
-    Steps = [  
+
+def hangman(tries):
+    stages = [  
         
                    """
        +-------+
@@ -111,36 +110,48 @@ def hangman(chance):
     GAME OVER !
     """
     ]
-    
-    return Steps[chance]
-    
+    return stages[tries]
 
 
 Already_used_letters = []
 word_to_find =word()
 display = underscore(word_to_find  )
 
-nb_erreurs = 0
 
-
-while '_' in display and nb_erreurs < 6:
-    letter = Input()
     
-    if letter in word_to_find :
-        word_to_find  += [ letter ]
-        
-    elif letter not in word_to_find :
-        nb_erreurs +=1
-        print(hangman(nb_erreurs ))
+Already_used_letters = []
+word_to_find =word()
+display = underscore(word_to_find)
 
+nb_errors = 0
+trie=6
+while '_' in display and nb_errors < 6:
+    letter = Input()
+
+    
+   
+    if letter not in (word_to_find and Already_used_letters) :
+        nb_errors +=1
+        trie -= 1
+        print(hangman(nb_errors ))
+
+    if  letter in Already_used_letters:
+        print('WORD ALREADY USED,TRY AGAIN')
+
+    if  letter not in Already_used_letters:
+         Already_used_letters += letter 
         
-    if letter in Already_used_letters:
-         Already_used_letters += [ letter ]
-         print("word allready used, please try again")
+
+    
         
     display = underscore(word_to_find , Already_used_letters  )
-    print( '\n Word to be guessed : ' , display , ' '*6 , 'Nombre d\'erreurs maximum :' , 11-nb_erreurs )
+    print( '\n Word to be guessed : ' , display , ' '*6 , word_to_find, 'Number of remaining tries:' , 6-nb_errors )
+    
+    if nb_errors==6:
+        print("GAME OVER, YOU ARE HANGED !")
+        break
 
+else:
+    print("GOOD JOB MAN, YOU DID IT")
 
-
- 
+    
